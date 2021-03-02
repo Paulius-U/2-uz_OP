@@ -4,4 +4,4 @@
 2. yra padaryta su vector ir masyvais
 3. programa veikia per compiler arba Visual Studio Code teriminala
 0.2v
-1.Leidžiama pasirinkti ar duomenys nuskaitomi nuo failo ar įrašomi ranka
+1.Leidžiama pasirinkti ar duomenys nuskaitomi nuo failo (kursiokai.txt) ar įrašomi ranka
