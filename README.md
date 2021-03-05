@@ -7,3 +7,6 @@
 0.2v
 
 1.Leidžiama pasirinkti ar duomenys nuskaitomi nuo failo (kursiokai.txt) ar įrašomi ranka
+
+0.3v
+1.Naudodamiesi 0.2v kur galima naudojame struct ir visą programą išskirstėme į main.cpp , funkcijos.cpp , funkcijos.hpp ir struct.hpp 
