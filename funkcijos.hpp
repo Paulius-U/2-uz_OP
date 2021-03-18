@@ -30,3 +30,4 @@ void Sortas (vector <duomenys> A, int n);
 void Klaida (int &ats);
 void Skaitymas (vector <duomenys> &A);
 void Ivedimas (vector <duomenys> &A);
+void Sukurimas(vector <duomenys> &A);
