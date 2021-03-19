@@ -37,12 +37,34 @@ bool Digits (const string & str)
     return all_of (str.begin(), str.end(), ::isdigit);
 }
 
-void Spauzdinimas (int n, vector <duomenys> A, int var)
+void Sukurimas(vector <duomenys> &A)
+{
+    int random, n = 10;
+    cout << "Iveskite mokiniu skaiciu: ";
+    cin >> random;
+    auto Start = std::chrono::high_resolution_clock::now();
+    std::ofstream R("kursiokai.txt");
+    for  (int i = 0; i < random; i++)
+    {
+        R << "Vardas" << i + 1 << " " << "Pavarde" << i + 1 << " ";
+        for (int j = 0; j < n; j++)
+        {
+            int d = 1 + rand() / (double) (RAND_MAX + 1) * 9;
+            R << d << " ";
+        }
+        R << endl;
+    }
+    auto End = std::chrono::high_resolution_clock::now();
+    cout << "Kursiokai.txt sukurimas: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< endl;
+    double s = std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
+    Skaitymas(A, s);
+}
+
+void Spauzdinimas (int n, vector <duomenys> A, int var, double s)
 {
     auto Start = std::chrono::high_resolution_clock::now();
     std::ofstream R("islaike.txt");
     std::ofstream RR("skola.txt");
-    int m = 30;
     R << "Vardas              Pavarde             Vidurkis            Mediana: " << endl;
     R << "---------------------------------------------------------------------" << endl;
     for (int i = 0; i < n; i++)
@@ -51,32 +73,39 @@ void Spauzdinimas (int n, vector <duomenys> A, int var)
         {
             R << A[i].Vardas << setw(20);
             R << A[i].Pavarde << setw(20);
-            R << A[i].Vidurkio_Balas << setw(20);
+            R << fixed << setprecision(2) << A[i].Vidurkio_Balas << setw(20) << right;
             R << A[i].Mediana;
             R << endl;            
         }
-        else
+    }
+    RR << "Vardas              Pavarde             Vidurkis            Mediana: " << endl;
+    RR << "---------------------------------------------------------------------" << endl;
+    for (int i = 0; i < n; i++)
+    {
+        if (A[i].Vidurkio_Balas < 5)
         {
-            RR << A[i].Vardas << setw(20;
-            RR << A[i].Pavarde << setw(20;
-            RR << A[i].Vidurkio_Balas << setw(20);
+            RR << A[i].Vardas << setw(20);
+            RR << A[i].Pavarde << setw(20);
+            RR << fixed << setprecision(2) << A[i].Vidurkio_Balas << setw(20);
             RR << A[i].Mediana;
             RR << endl;    
         }
     }
     auto End = std::chrono::high_resolution_clock::now();
     R.close();
-    cout << "Duomenu isskaidymas i dvi dalis ir i du failus uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() << " ms."<< endl;
+    cout << "Duomenu isskaidymas i du failus: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000. << " s."<< endl;
+    s = s + std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
+    cout << "Visas laikas: " << s << " s.";
 }
 
-void Sortas (vector <duomenys> A, int n)
+void Sortas (vector <duomenys> A, int n, double s)
 {
     sort (A.begin(), A.end(), [](const duomenys &i, const duomenys &j)
     {
        if (i.Vardas != j.Vardas) return i.Vardas < j.Vardas;
        else return i.Pavarde < j.Pavarde;
     });
-    Spauzdinimas (n, A, 2);
+    Spauzdinimas (n, A, 2, s);
 }
 
 void Klaida (int &ats)
@@ -92,7 +121,7 @@ void Klaida (int &ats)
 
 
 
-void Skaitymas (vector <duomenys> &A)
+void Skaitymas (vector <duomenys> &A, double s)
 {
     int Nr = -1;
     auto Start = std::chrono::high_resolution_clock::now();
@@ -136,14 +165,15 @@ void Skaitymas (vector <duomenys> &A)
         }
         //else cout << "Klaida " << endl;
     }
+    auto End = std::chrono::high_resolution_clock::now();
+    cout << "Duomenu nuskaitymas is failo uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000. << " s."<< endl;
+    s = s + std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
     if (Nr > -1)
     {
-        Sortas (A, Nr);
+        Sortas (A, Nr, s);
     }
     //else cout << "Failas tuscias" << endl;
-    auto End = std::chrono::high_resolution_clock::now();
     D.close();
-    cout << "Duomenu nuskaitymas is failo uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() << " ms."<< endl;
 }
 
 void Ivedimas (vector <duomenys> &A)
@@ -264,27 +294,6 @@ void Ivedimas (vector <duomenys> &A)
     int r;
     cout << "Norite Vidurkio (1), Medianos (0) ar abieju (2): ";
     cin >> r;
-    Spauzdinimas(k, A, r);
+    Spauzdinimas(k, A, r, 0);
 }
 
-void Sukurimas(vector <duomenys> &A)
-{
-    int random, n = 11;
-    cout << "Iveskite mokiniu skaiciu: ";
-    cin >> random;
-    auto Start = std::chrono::high_resolution_clock::now();
-    std::ofstream R("kursiokai.txt");
-    for  (int i = 0; i < random; i++)
-    {
-        R << "Vardas" << i + 1 << " " << "Pavarde" << i + 1 << " ";
-        for (int j = 0; j < n; j++)
-        {
-            int d = 1 + rand() / (double) (RAND_MAX + 1) * 9;
-            R << d << " ";
-        }
-        R << endl;
-    }
-    auto End = std::chrono::high_resolution_clock::now();
-    cout << "kursiokai.txt nuskaitymas uztruko " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() << " ms."<< endl;
-    Skaitymas(A);
-}
