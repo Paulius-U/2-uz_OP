@@ -20,3 +20,13 @@
 ![image](https://user-images.githubusercontent.com/75576100/111757970-96be4c80-88a4-11eb-94b5-24f53f42bda0.png)
 ![image](https://user-images.githubusercontent.com/75576100/111758021-a63d9580-88a4-11eb-99f5-a45e095f807e.png)
 ![image](https://user-images.githubusercontent.com/75576100/111762762-0c78e700-88aa-11eb-9956-dbb85173d165.png)
+
+
+0.4.1v
+
+1.Pataisyta tvarka laiko ir įdėtas bendras visas laikas.
+![image](https://user-images.githubusercontent.com/75576100/111769594-14d52000-88b2-11eb-9f52-06a30626073e.png)
+![image](https://user-images.githubusercontent.com/75576100/111769709-31715800-88b2-11eb-8a62-c72eb313f024.png)
+![image](https://user-images.githubusercontent.com/75576100/111769754-3e8e4700-88b2-11eb-913e-047696a358ee.png)
+![image](https://user-images.githubusercontent.com/75576100/111769874-61b8f680-88b2-11eb-8c6a-45a1f82d7ebd.png)
+
