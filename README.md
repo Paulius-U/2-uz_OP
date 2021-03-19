@@ -25,6 +25,7 @@
 0.4.1v
 
 1.Pataisyta tvarka laiko ir įdėtas bendras visas laikas.
+
 ![image](https://user-images.githubusercontent.com/75576100/111769594-14d52000-88b2-11eb-9f52-06a30626073e.png)
 ![image](https://user-images.githubusercontent.com/75576100/111769709-31715800-88b2-11eb-8a62-c72eb313f024.png)
 ![image](https://user-images.githubusercontent.com/75576100/111769754-3e8e4700-88b2-11eb-913e-047696a358ee.png)
