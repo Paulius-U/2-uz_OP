@@ -36,4 +36,5 @@ double Balas (const duomenys& A, double (*Criteria)(vector <int>));
 bool Digits (const string & str);
 void Klaida (int &ats);
 void Listas();
-void Ivedimas (vector <duomenys> &A);
+void Vectorius();
+void Dequelas();
