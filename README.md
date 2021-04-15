@@ -34,3 +34,20 @@
 0.5v
 
 1. Naudojame vector, list, deque patikrinti sparta
+
+0.5.1v
+
+1.Vector:
+![image](https://user-images.githubusercontent.com/75576100/114917171-5237b980-9e2e-11eb-9146-2241517c2179.png)
+![image](https://user-images.githubusercontent.com/75576100/114917415-962abe80-9e2e-11eb-9e42-9f673659ec4b.png)
+
+2.List:
+![image](https://user-images.githubusercontent.com/75576100/114917561-c3776c80-9e2e-11eb-847a-e361d499c3e2.png)
+![image](https://user-images.githubusercontent.com/75576100/114917592-ceca9800-9e2e-11eb-8d9f-5abc3205daa4.png)
+
+3.Deque:
+![image](https://user-images.githubusercontent.com/75576100/114917696-e9047600-9e2e-11eb-9be4-8d90dcb6aa6e.png)
+![image](https://user-images.githubusercontent.com/75576100/114917769-fd487300-9e2e-11eb-98f1-07ac474aeb31.png)
+
+
+
