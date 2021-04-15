@@ -1,439 +1,608 @@
+#include <vector>
+#include <list>
+#include <deque>
+#include <chrono>
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <random>
+
 #include "funkcijos.hpp"
 #include "struct.hpp"
 
-double Vidurkis (vector <int> Balai)
+template <typename T>
+void Klaida(T& in)
 {
-    return std::accumulate (Balai.begin(), Balai.end(), 0.0)/Balai.size();
+    std::cin.clear();
+    std::cin.ignore(256, '\n');
+    std::cin >> in;
 }
 
 
-double Mediana (vector <int> Balai)
+//Pasirinkimas tarp dvieju variantu
+void Pasirinkimas (char& in, char pirmas, char antras)
 {
-    vector <int>::size_type VecSize;
-    VecSize size = Balai.size();
+    while (!(in == pirmas || in == antras))
+    {
+        std::cout << "Klaida. Pasirinkimas tarp: (" << pirmas << " / " << antras << ")";
+        Klaida(in);
+    }
+}
 
-    sort (Balai.begin(), Balai.end());
+//Pasirinkimas tarp triju viariantu
+void Pasirinkimas (char& in, char pirmas, char antras, char trecias)
+{
+    while (!(in == pirmas || in == antras || in == trecias))
+    {
+        std::cout << "Klaida. Pasirinkimas tarp: (" << pirmas << " / " << antras << " / ";
+        std::cout << trecias << ")" << "\n";
+        Klaida(in);
+    }
+}
 
-    VecSize Middle = size / 2;
+//pazymiu patikrinimas
+void Pazymiai (int& in, int min, int max)
+{
+    while (in < min || in > max || std::cin.fail())
+    {
+        std::cout << "Klaida. Pasirinkimas intervale nuo " << min << " iki " << max << "\n";
+        Klaida(in);
+    }
+}
 
-    if (size % 2 == 0)
-        return (Balai[Middle-1] + Balai[Middle])/2;
+void Vectorius (char Data, char Pazymys)
+{
+    std::vector <duomenys> Skolininkai, islaike;
+    
+
+    if(Data == '1' || Data =='2')
+        Data_Vector(Skolininkai, Data, Pazymys);
     else
-        return Balai[Middle];
-}
-//---------------------------------------
-double Balas (double Exam, double Score)
-{
-    return 0.4 * Score + 0.6 * Exam;
-}
-double Balas (const duomenys& A, double (*Criteria)(vector <int>))
-{
-    return Balas (A.Egzaminas, Criteria(A.Balai)); 
-}
-//----------------------------------------
-bool Digits (const string & str)   
-{
-    return all_of (str.begin(), str.end(), ::isdigit);
-}
-void Klaida (int &ats)
-{
-    while(cin.fail())
     {
-        cout << "Klaida, Iveskite ko praso: " << endl;
-        cin.clear();
-        cin.ignore(256, '\n');
-        cin >> ats;
+        std::string Failo_Vardas = GetFile();
+        auto Start = std::chrono::high_resolution_clock::now();
+        Failo_Skaitymas_Vector(Skolininkai, Failo_Vardas, Pazymys);
+        auto End = std::chrono::high_resolution_clock::now();
+        std::cout << "Failo nuskaitymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< std::endl;
     }
-}
-void Listas()
-{
-    std::list <duomenys> S;
-    duomenys A;
-    string::size_type LongestName = 0,
-                      LongestSurname = 0;
-    S.clear();
-    int random;
-    cout << "Iveskite mokiniu skaiciu: ";
-    cin >> random;
-    //Failo sukurimas
-auto Start = std::chrono::high_resolution_clock::now();
-    unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
-    std::default_random_engine eng(seed);
-    std::uniform_int_distribution <int> Interval (1, 10), Amount(10, 20);
+    Skolininkai.shrink_to_fit();
 
-    int n = Amount(eng);
-    std::ofstream R;
-    R.open("kursiokai.txt");
-    for  (size_t i = 1; i <= random; i++)
-    {
-        R << "Vardas" << i << " " << "Pavarde" << i << " " << Interval(eng);
-        vector <int> Balai;
-        vector <int>::iterator IT;
-        for (size_t j = 0; j < n; j++)
-            Balai.push_back(Interval(eng));
-        for (IT = Balai.begin(); IT < Balai.end(); IT++)
-            R << " " << *IT;
-        R << endl;
-    }
-    R.close();
-auto End = std::chrono::high_resolution_clock::now();
-    cout << "Kursiokai.txt sukurimas: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< endl;
-    double s = std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
-    //nuskaitymas failo
-    S.clear(); 
-    std::ifstream D("kursiokai.txt");
-    try
-    {
-        if (!D.good()) cout << "Tokio failo nera: " << endl;
-    }
-    catch(const char *Message)
-    {
-        cout << Message << endl;
-    }    
-auto Start2 = std::chrono::high_resolution_clock::now();
-    std::string line, Name, Surname, Exam, b;
-    while (getline (D, line))
-    {
-        std::stringstream iss(line);
-        iss >> Name >> Surname >> Exam;
+    auto Start0 = std::chrono::high_resolution_clock::now();
+    Dalinimas_Vector(Skolininkai, islaike);
+    auto End0 = std::chrono::high_resolution_clock::now();
+    std::cout << "Failo suskirstymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.<< " s."<< std::endl;
 
-        A.Vardas = Name;
-        LongestName = std::max(LongestName, A.Vardas.length());
-        A.Pavarde = Surname;
-        LongestSurname = std::max(LongestSurname, A.Pavarde.length());
-        A.Egzaminas = stoi(Exam);
-        A.Balai.clear();
-        while (iss >> b)
+    Spauzdinimas_Vector(islaike, Pazymys, "Islaike.txt");
+    Spauzdinimas_Vector(Skolininkai, Pazymys, "Skolininkai.txt");
+} 
+
+void Pazymiu_generavimas_Vector (duomenys* A, char Pazymys)
+{
+    using hrClock = std::chrono::high_resolution_clock;
+    std::mt19937 mt(static_cast<long unsigned int>(hrClock::now().time_since_epoch().count()));
+    std::uniform_int_distribution<int> random10(1, 10);
+
+    char random;
+    std::vector<int> ND;
+    std::cout << "Pazymiu generavimas: \n";
+    do
+    {
+        ND.push_back(random10(mt));
+        std::cout << "Balas: " << ND.back() << "\nDar viena (1/0): ";
+        std::cin >> random;
+        Pasirinkimas(random, '0', '1');
+    } while (random == '1');
+
+    int Egzas = random10(mt);
+    std::cout << "Egzamino rezultatas: " << Egzas << std::endl;
+
+    A ->Vidurkio_Balas = Galutinis_Vector(ND, Egzas, Pazymys);
+}
+
+double Galutinis_Vector (std::vector <int> &A, int Egzas, char tipas)
+{
+    double nd;
+    if (!A.empty()) 
+        tipas == '0' ? nd = Mediana_Vector(A, A.size()) : nd = Vidurkis_Vector(A, A.size());
+    else nd = 0;
+    return 0.4 * nd + 0.6 * Egzas;
+}
+double Vidurkis_Vector (std::vector <int> &Balai, int n)
+{
+    double Suma = 0;
+    for (int i = 0; i < n; i++)
+        Suma += Balai[i];
+    return 1.0 * Suma / n;
+}
+double Mediana_Vector (std::vector <int> &Balai, int n)
+{
+    double m;
+    std::sort(Balai.begin(), Balai.end());
+    n % 2 == 0 ? (m = 1.00 * (Balai[n / 2 - 1] + Balai[n / 2]) / 2) : m = Balai[n / 2];
+    return m;
+}
+void Data_Vector (std::vector<duomenys> &A, char Data, char Pazymys)
+{
+    char random;
+    bool IF;
+    int nd;
+    duomenys Laikinas;
+    std::vector <int> ND;
+    int Egzas;
+    do
+    {
+        IF = true;
+        ND.clear();
+
+        std::cout << "Vardas ir Pavarde" << std::endl;
+        std::cin >> Laikinas.Vardas >> Laikinas.Pavarde;
+
+        if(Data == '1')  Pazymiu_generavimas_Vector (&Laikinas, Pazymys);
+        else
         {
-            if (Digits (b))
+            std::cout << "Veskite pazymius: " << std::endl;
+            do
             {
-                int balas = stoi (b);
-                if (balas > 0 && balas <= 10)
-                {
-                    A.Balai.push_back (b);
-                }
-            }
-        }
-        S.push_back(A);
-        iss.clear();
-        iss.end;
-    }
-auto End2 = std::chrono::high_resolution_clock::now();
-    cout << "Duomenu nuskaitymas is failo uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End2 - Start2).count() / 1000. << " s."<< endl;
-    s = s + std::chrono::duration_cast<std::chrono::milliseconds>(End2 - Start2).count() / 1000.;
+                std::cin >> nd;
+                Pazymiai(nd, 0, 10);
+                if (nd == 0) IF = false;
+                else ND.push_back(nd);
+            } while (IF);
+            ND.shrink_to_fit();
 
-auto Start3 = std::chrono::high_resolution_clock::now();
-    std::list <duomenys> Failed;
-    std::list <duomenys>::iterator IT = S.begin();
-    while (IT != S.end())
-    {
-        if (Balas((*IT), Vidurkis)< 5.0, Balai((*IT), Mediana) < 5.0)
+            std::cout << "Egzo balas: \n";
+            std::cin >> Egzas;
+            Pazymiai(Egzas, 0, 10);
+            Laikinas.Vidurkio_Balas = Galutinis_Vector(ND, Egzas, Pazymys);
+        }
+        A.push_back(Laikinas);
+
+        std::cout << "Prideti studenta: (1/0) ";
+        std::cin >> random;
+        Pasirinkimas(random, '0', '1');
+    } while (random == '1');
+}
+void Failo_Skaitymas_Vector (std::vector<duomenys> &A, std::string FileName, char Pazymys) 
+{
+    std::ifstream D (FileName);
+
+    int n = 0;
+    std::string header;
+    std::getline(D, header);           
+    std::istringstream firstRow (header);
+    std::string str;
+    while (firstRow >> str)             
+        n ++;
+    n -= 3;                        
+
+    duomenys B;
+    int tempMark, Egzaminas;
+    std::string row;
+    std::istringstream dataRow;
+    std::vector<int> ND;
+    ND.reserve(n);
+    while (std::getline(D, row)) 
+    {      
+        dataRow.clear();
+        dataRow.str(row);
+        dataRow >> B.Vardas >> B.Pavarde;
+        ND.clear();                      
+        for (int i = 0; i < n; i ++)
         {
-            Failed.push_back(*IT);
-            IT = S.erase(IT);
+            dataRow >> tempMark;
+            ND.push_back(tempMark);
         }
-        else IT++;
-    }
-
-    //skolininkai
-    std::ofstream R;
-    R.open("skola.txt");
-    for(std::list <duomenys>::iterator IT = Failed.begin(); IT != Failed.end(); IT++)
-    {
-        R << (*IT).Vardas << string(LongestName + 1 - (*IT).Vardas.size(), ' ');
-        R << (*IT).Pavarde << string(LongestSurname + 1 - (*IT).Pavarde.size());
-
-        std::streamsize prec = cout.precision();
-        R << std::fixed << setprecision(2) << Balas((*IT), Vidurkis) << Balas((*IT), Mediana);
-        R << setprecision(prec) << endl;
-    }
-    for (auto i = 0; i != LongestName + LongestSurname + 10; i++)
-        R << "-";
-    R << endl;
-    R.close();
-
-    //iskaile
-    std::ofstream R2;
-    R2.open("skola.txt");
-    for(std::list <duomenys>::iterator IT = Failed.begin(); IT != Failed.end(); IT++)
-    {
-        R2 << (*IT).Vardas << string(LongestName + 1 - (*IT).Vardas.size(), ' ');
-        R2 << (*IT).Pavarde << string(LongestSurname + 1 - (*IT).Pavarde.size());
-
-        std::streamsize prec = cout.precision();
-        R2 << std::fixed << setprecision(2) << Balas((*IT), Vidurkis) << Balas((*IT), Mediana);
-        R2 << setprecision(prec) << endl;
-    }
-    for (auto i = 0; i != LongestName + LongestSurname + 10; i++)
-        R2 << "-";
-    R2 << endl;
-    R2.close();
-
-
-auto End3 = std::chrono::high_resolution_clock::now();
-    cout << "Duomenu isskaidymas i du failus: " << std::chrono::duration_cast<std::chrono::milliseconds>(End3 - Start3).count() / 1000. << " s."<< endl;
-    s = s + std::chrono::duration_cast<std::chrono::milliseconds>(End3 - Start3).count() / 1000.;
-    cout << "Is viso laiko uztruko: " << s << " s";
+        dataRow >> Egzaminas;
+        B.Vidurkio_Balas = Galutinis_Vector(ND, Egzaminas, Pazymys);
+        A.push_back(B);               
+    } 
+    D.close();
 }
 
-void Vectorius()
+void Dalinimas_Vector (std::vector<duomenys> &A, std::vector<duomenys> &B)
 {
-    std::vector <duomenys> S;
-    duomenys A;
-    string::size_type LongestName = 0,
-                      LongestSurname = 0;
-    S.clear();
-    int random;
-    cout << "Iveskite mokiniu skaiciu: ";
-    cin >> random;
-    //Failo sukurimas
-auto Start = std::chrono::high_resolution_clock::now();
-    unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
-    std::default_random_engine eng(seed);
-    std::uniform_int_distribution <int> Interval (1, 10), Amount(10, 20);
+    std::sort(A.begin(), A.end(), [](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
 
-    int n = Amount(eng);
-    std::ofstream R;
-    R.open("kursiokai.txt");
-    for  (size_t i = 1; i <= random; i++)
-    {
-        R << "Vardas" << i << " " << "Pavarde" << i << " " << Interval(eng);
-        vector <int> Balai;
-        vector <int>::iterator IT;
-        for (size_t j = 0; j < n; j++)
-            Balai.push_back(Interval(eng));
-        for (IT = Balai.begin(); IT < Balai.end(); IT++)
-            R << " " << *IT;
-        R << endl;
-    }
-    R.close();
-auto End = std::chrono::high_resolution_clock::now();
-    cout << "Kursiokai.txt sukurimas: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< endl;
-    double s = std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
-    //nuskaitymas failo
-    S.clear(); 
-    std::ifstream D("kursiokai.txt");
-    try
-    {
-        if (!D.good()) cout << "Tokio failo nera: " << endl;
-    }
-    catch(const char *Message)
-    {
-        cout << Message << endl;
-    }    
-auto Start2 = std::chrono::high_resolution_clock::now();
-    std::string line, Name, Surname, Exam, b;
-    while (getline (D, line))
-    {
-        std::stringstream iss(line);
-        iss >> Name >> Surname >> Exam;
-
-        A.Vardas = Name;
-        LongestName = std::max(LongestName, A.Vardas.length());
-        A.Pavarde = Surname;
-        LongestSurname = std::max(LongestSurname, A.Pavarde.length());
-        A.Egzaminas = stoi(Exam);
-        A.Balai.clear();
-        while (iss >> b)
-        {
-            if (Digits (b))
-            {
-                int balas = stoi (b);
-                if (balas > 0 && balas <= 10)
-                {
-                    A.Balai.push_back (b);
-                }
-            }
-        }
-        S.push_back(A);
-        iss.clear();
-        iss.end;
-    }
-auto End2 = std::chrono::high_resolution_clock::now();
-    cout << "Duomenu nuskaitymas is failo uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End2 - Start2).count() / 1000. << " s."<< endl;
-    s = s + std::chrono::duration_cast<std::chrono::milliseconds>(End2 - Start2).count() / 1000.;
-
-auto Start3 = std::chrono::high_resolution_clock::now();
-    std::vector <duomenys> Failed;
-    std::vector <duomenys>::iterator IT = S.begin();
-    while (IT != S.end())
-    {
-        if (Balas((*IT), Vidurkis)< 5.0, Balai((*IT), Mediana) < 5.0)
-        {
-            Failed.push_back(*IT);
-            IT = S.erase(IT);
-        }
-        else IT++;
-    }
-
-    //skolininkai
-    std::ofstream R;
-    R.open("skola.txt");
-    for(std::vector <duomenys>::iterator IT = Failed.begin(); IT != Failed.end(); IT++)
-    {
-        R << (*IT).Vardas << string(LongestName + 1 - (*IT).Vardas.size(), ' ');
-        R << (*IT).Pavarde << string(LongestSurname + 1 - (*IT).Pavarde.size());
-
-        std::streamsize prec = cout.precision();
-        R << std::fixed << setprecision(2) << Balas((*IT), Vidurkis) << Balas((*IT), Mediana);
-        R << setprecision(prec) << endl;
-    }
-    for (auto i = 0; i != LongestName + LongestSurname + 10; i++)
-        R << "-";
-    R << endl;
-    R.close();
-
-    //iskaile
-    std::ofstream R2;
-    R2.open("skola.txt");
-    for(std::vector <duomenys>::iterator IT = Failed.begin(); IT != Failed.end(); IT++)
-    {
-        R2 << (*IT).Vardas << string(LongestName + 1 - (*IT).Vardas.size(), ' ');
-        R2 << (*IT).Pavarde << string(LongestSurname + 1 - (*IT).Pavarde.size());
-
-        std::streamsize prec = cout.precision();
-        R2 << std::fixed << setprecision(2) << Balas((*IT), Vidurkis) << Balas((*IT), Mediana);
-        R2 << setprecision(prec) << endl;
-    }
-    for (auto i = 0; i != LongestName + LongestSurname + 10; i++)
-        R2 << "-";
-    R2 << endl;
-    R2.close();
-
-
-auto End3 = std::chrono::high_resolution_clock::now();
-    cout << "Duomenu isskaidymas i du failus: " << std::chrono::duration_cast<std::chrono::milliseconds>(End3 - Start3).count() / 1000. << " s."<< endl;
-    s = s + std::chrono::duration_cast<std::chrono::milliseconds>(End3 - Start3).count() / 1000.;
-    cout << "Is viso laiko uztruko: " << s << " s";
+    int n;
+    while (A[n].Vidurkio_Balas < 5.0 && n != A.size()) 
+        n++;
+    B.reserve(A.size() - n);
+    std::copy(A.begin() + n, A.end(), std::back_inserter(B));
+    A.resize(n);
+    A.shrink_to_fit();
 }
 
-Dequelas()
+void Spauzdinimas_Vector (std::vector<duomenys> &A, char Pazymys, std::string Failas)
 {
-    std::deque <duomenys> S;
-    duomenys A;
-    string::size_type LongestName = 0,
-                      LongestSurname = 0;
-    S.clear();
-    int random;
-    cout << "Iveskite mokiniu skaiciu: ";
-    cin >> random;
-    //Failo sukurimas
-auto Start = std::chrono::high_resolution_clock::now();
-    unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
-    std::default_random_engine eng(seed);
-    std::uniform_int_distribution <int> Interval (1, 10), Amount(10, 20);
+    std::ofstream R(Failas);
+    std::ostringstream RR("");
 
-    int n = Amount(eng);
-    std::ofstream R;
-    R.open("kursiokai.txt");
-    for  (size_t i = 1; i <= random; i++)
+    RR << std::setw(20) << std::left << "Vardas" << std::setw(20) << std::left << "Pavarde";
+    RR << "Vidurkis";
+    R << RR.str();
+
+    Pazymys == '0' ? R <<"(Med.)\n" : R << "(Vid.)\n";
+    R << "--------------------------------------------------------\n";
+
+    for (int i = 0; i < A.size(); i++)
     {
-        R << "Vardas" << i << " " << "Pavarde" << i << " " << Interval(eng);
-        vector <int> Balai;
-        vector <int>::iterator IT;
-        for (size_t j = 0; j < n; j++)
-            Balai.push_back(Interval(eng));
-        for (IT = Balai.begin(); IT < Balai.end(); IT++)
-            R << " " << *IT;
-        R << endl;
+        RR.str("");
+        RR << std::setw(20) << std::left << A[i].Vardas << std::setw(20) << A[i].Pavarde;
+        RR << std::fixed << std::setprecision(2) << A[i].Vidurkio_Balas << std::endl;
+        R << RR.str();
     }
     R.close();
-auto End = std::chrono::high_resolution_clock::now();
-    cout << "Kursiokai.txt sukurimas: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< endl;
-    double s = std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
-    //nuskaitymas failo
-    S.clear(); 
-    std::ifstream D("kursiokai.txt");
-    try
-    {
-        if (!D.good()) cout << "Tokio failo nera: " << endl;
-    }
-    catch(const char *Message)
-    {
-        cout << Message << endl;
-    }    
-auto Start2 = std::chrono::high_resolution_clock::now();
-    std::string line, Name, Surname, Exam, b;
-    while (getline (D, line))
-    {
-        std::stringstream iss(line);
-        iss >> Name >> Surname >> Exam;
+}
 
-        A.Vardas = Name;
-        LongestName = std::max(LongestName, A.Vardas.length());
-        A.Pavarde = Surname;
-        LongestSurname = std::max(LongestSurname, A.Pavarde.length());
-        A.Egzaminas = stoi(Exam);
-        A.Balai.clear();
-        while (iss >> b)
+void Listas (char Data, char Pazymys)
+{
+    std::list <duomenys> Skolininkai, islaike;
+    
+
+    if(Data == '1' || Data =='2')
+        Data_List(Skolininkai, Data, Pazymys);
+    else
+    {
+        std::string Failo_Vardas = GetFile();
+        auto Start = std::chrono::high_resolution_clock::now();
+        Failo_Skaitymas_List(Skolininkai, Failo_Vardas, Pazymys);
+        auto End = std::chrono::high_resolution_clock::now();
+        std::cout << "Failo nuskaitymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< std::endl;
+    }
+
+    auto Start0 = std::chrono::high_resolution_clock::now();
+    Dalinimas_List(Skolininkai, islaike);
+    auto End0 = std::chrono::high_resolution_clock::now();
+    std::cout << "Failo suskirstymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.<< " s."<< std::endl;
+
+    Spauzdinimas_List(islaike, Pazymys, "Islaike.txt");
+    Spauzdinimas_List(Skolininkai, Pazymys, "Skolininkai.txt");
+} 
+
+void Pazymiu_generavimas_List (duomenys* A, char Pazymys)
+{
+    using hrClock = std::chrono::high_resolution_clock;
+    std::mt19937 mt(static_cast<long unsigned int>(hrClock::now().time_since_epoch().count()));
+    std::uniform_int_distribution<int> random10(1, 10);
+
+    char random;
+    std::list<int> ND;
+    std::cout << "Pazymiu generavimas: \n";
+    do
+    {
+        ND.push_back(random10(mt));
+        std::cout << "Balas: " << ND.back() << "\nDar viena (1/0): ";
+        std::cin >> random;
+        Pasirinkimas(random, '0', '1');
+    } while (random == '1');
+
+    int Egzas = random10(mt);
+    std::cout << "Egzamino rezultatas: " << Egzas << std::endl;
+
+    A ->Vidurkio_Balas = Galutinis_List(ND, Egzas, Pazymys);
+}
+
+double Galutinis_List (std::list <int> &A, int Egzas, char tipas)
+{
+    double nd;
+    if (!A.empty()) 
+        tipas == '0' ? nd = Mediana_List(A, A.size()) : nd = Vidurkis_List(A, A.size());
+    else nd = 0;
+    return 0.4 * nd + 0.6 * Egzas;
+}
+double Vidurkis_List (std::list <int> &Balai, int n)
+{
+    double Suma = 0;
+    auto i = Balai.begin();
+    for (auto i = Balai.begin(); i != Balai.end(); i++)
+        Suma += *(i);
+    return 1.0 * Suma / n;
+}
+double Mediana_List (std::list <int> &Balai, int n)
+{
+    double m;
+    auto it1 = Balai.begin();         
+    auto it2 = it1;
+    std::advance(it1, n / 2 - 1);   
+    std::advance(it2, n / 2);       
+
+    n % 2 == 0 ? (m = 1.00 * (*it1 + *it2) / 2) : m = *it2;
+    return m;
+}
+void Data_List (std::list<duomenys> &A, char Data, char Pazymys)
+{
+    char random;
+    bool IF;
+    int nd;
+    duomenys Laikinas;
+    std::list <int> ND;
+    int Egzas;
+    do
+    {
+        IF = true;
+        ND.clear();
+
+        std::cout << "Vardas ir Pavarde\n";
+        std::cin >> Laikinas.Vardas >> Laikinas.Pavarde;
+
+        if(Data == '1')  Pazymiu_generavimas_List (&Laikinas, Pazymys);
+        else
         {
-            if (Digits (b))
+            std::cout << "Veskite pazymius: " << std::endl;
+            do
             {
-                int balas = stoi (b);
-                if (balas > 0 && balas <= 10)
-                {
-                    A.Balai.push_back (b);
-                }
-            }
-        }
-        S.push_back(A);
-        iss.clear();
-        iss.end;
-    }
-auto End2 = std::chrono::high_resolution_clock::now();
-    cout << "Duomenu nuskaitymas is failo uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End2 - Start2).count() / 1000. << " s."<< endl;
-    s = s + std::chrono::duration_cast<std::chrono::milliseconds>(End2 - Start2).count() / 1000.;
+                std::cin >>nd;
+                Pazymiai(nd, 0, 10);
+                if (nd == 0) IF = false;
+                else ND.push_back(nd);
+            } while (IF);
 
-auto Start3 = std::chrono::high_resolution_clock::now();
-    std::deque <duomenys> Failed;
-    std::deque <duomenys>::iterator IT = S.begin();
-    while (IT != S.end())
-    {
-        if (Balas((*IT), Vidurkis)< 5.0, Balai((*IT), Mediana) < 5.0)
+            std::cout << "Egzo balas: \n";
+            std::cin >> Egzas;
+            Pazymiai(Egzas, 0, 10);
+            Laikinas.Vidurkio_Balas = Galutinis_List(ND, Egzas, Pazymys);
+        }
+        A.push_back(Laikinas);
+
+        std::cout << "Prideti studenta: (1/0) ";
+        std::cin >> random;
+        Pasirinkimas(random, '0', '1');
+    } while (random == '1');
+}
+void Failo_Skaitymas_List (std::list<duomenys> &A, std::string FileName, char Pazymys) 
+{
+    std::ifstream D (FileName);
+
+    int n = 0;
+    std::string header;
+    std::getline(D, header);           
+    std::istringstream firstRow (header);
+    std::string str;
+    while (firstRow >> str)             
+        n ++;
+    n -= 3;                        
+
+    duomenys B;
+    int tempMark, Egzaminas;
+    std::string row;
+    std::istringstream dataRow;
+    std::list<int> ND;
+    while (std::getline(D, row)) 
+    {      
+        dataRow.clear();
+        dataRow.str(row);
+        dataRow >> B.Vardas >> B.Pavarde;
+        ND.clear();                      
+        for (int i = 0; i < n; i ++)
         {
-            Failed.push_back(*IT);
-            IT = S.erase(IT);
+            dataRow >> tempMark;
+            ND.push_back(tempMark);
         }
-        else IT++;
-    }
+        dataRow >> Egzaminas;
+        B.Vidurkio_Balas = Galutinis_List(ND, Egzaminas, Pazymys);
+        A.push_back(B);               
+    } 
+    D.close();
+}
 
-    //skolininkai
-    std::ofstream R;
-    R.open("skola.txt");
-    for(std::deque <duomenys>::iterator IT = Failed.begin(); IT != Failed.end(); IT++)
+void Dalinimas_List (std::list<duomenys> &A, std::list<duomenys> &B)
+{
+    A.sort([](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
+
+    int n = 0;
+    auto it = A.begin();
+    while (it->Vidurkio_Balas < 5.0 && it != A.end()) 
     {
-        R << (*IT).Vardas << string(LongestName + 1 - (*IT).Vardas.size(), ' ');
-        R << (*IT).Pavarde << string(LongestSurname + 1 - (*IT).Pavarde.size());
-
-        std::streamsize prec = cout.precision();
-        R << std::fixed << setprecision(2) << Balas((*IT), Vidurkis) << Balas((*IT), Mediana);
-        R << setprecision(prec) << endl;
+        n++;
+        it++;
     }
-    for (auto i = 0; i != LongestName + LongestSurname + 10; i++)
-        R << "-";
-    R << endl;
+    
+    B.assign(it, A.end());
+    A.resize(n);
+}
+
+void Spauzdinimas_List (std::list<duomenys> &A, char Pazymys, std::string Failas)
+{
+    std::ofstream R(Failas);
+    std::ostringstream RR("");
+
+    RR << std::setw(20) << std::left << "Vardas" << std::setw(20) << std::left << "Pavarde";
+    RR << "Vidurkis";
+    R << RR.str();
+
+    Pazymys == '0' ? R <<"(Med.)\n" : R << "(Vid.)\n";
+    R << "--------------------------------------------------------\n";
+
+    auto i = A.begin();
+    for (auto i = A.begin(); i != A.end(); i++)
+    {
+        RR.str("");
+        RR << std::setw(20) << std::left << i->Vardas << std::setw(20) << i->Pavarde;
+        RR << std::fixed << std::setprecision(2) << i->Vidurkio_Balas << std::endl;
+        R << RR.str();
+    }
     R.close();
+}
 
-    //iskaile
-    std::ofstream R2;
-    R2.open("skola.txt");
-    for(std::deque <duomenys>::iterator IT = Failed.begin(); IT != Failed.end(); IT++)
+void Dequelas (char Data, char Pazymys)
+{
+    std::deque <duomenys> Skolininkai, islaike;
+    
+
+    if(Data == '1' || Data =='2')
+        Data_Deque(Skolininkai, Data, Pazymys);
+    else
     {
-        R2 << (*IT).Vardas << string(LongestName + 1 - (*IT).Vardas.size(), ' ');
-        R2 << (*IT).Pavarde << string(LongestSurname + 1 - (*IT).Pavarde.size());
-
-        std::streamsize prec = cout.precision();
-        R2 << std::fixed << setprecision(2) << Balas((*IT), Vidurkis) << Balas((*IT), Mediana);
-        R2 << setprecision(prec) << endl;
+        std::string Failo_Vardas = GetFile();
+        auto Start = std::chrono::high_resolution_clock::now();
+        Failo_Skaitymas_Deque(Skolininkai, Failo_Vardas, Pazymys);
+        auto End = std::chrono::high_resolution_clock::now();
+        std::cout << "Failo nuskaitymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< std::endl;
     }
-    for (auto i = 0; i != LongestName + LongestSurname + 10; i++)
-        R2 << "-";
-    R2 << endl;
-    R2.close();
 
+    auto Start0 = std::chrono::high_resolution_clock::now();
+    Dalinimas_Deque(Skolininkai, islaike);
+    auto End0 = std::chrono::high_resolution_clock::now();
+    std::cout << "Failo suskirstymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.<< " s."<< std::endl;
 
-auto End3 = std::chrono::high_resolution_clock::now();
-    cout << "Duomenu isskaidymas i du failus: " << std::chrono::duration_cast<std::chrono::milliseconds>(End3 - Start3).count() / 1000. << " s."<< endl;
-    s = s + std::chrono::duration_cast<std::chrono::milliseconds>(End3 - Start3).count() / 1000.;
-    cout << "Is viso laiko uztruko: " << s << " s";
+    Spauzdinimas_Deque(islaike, Pazymys, "Islaike.txt");
+    Spauzdinimas_Deque(Skolininkai, Pazymys, "Skolininkai.txt");
+} 
+
+void Pazymiu_generavimas_Deque (duomenys* A, char Pazymys)
+{
+    using hrClock = std::chrono::high_resolution_clock;
+    std::mt19937 mt(static_cast<long unsigned int>(hrClock::now().time_since_epoch().count()));
+    std::uniform_int_distribution<int> random10(1, 10);
+
+    char random;
+    std::deque<int> ND;
+    std::cout << "Pazymiu generavimas: \n";
+    do
+    {
+        ND.push_back(random10(mt));
+        std::cout << "Balas: " << ND.back() << "\nDar viena (1/0): ";
+        std::cin >> random;
+        Pasirinkimas(random, '0', '1');
+    } while (random == '1');
+
+    int Egzas = random10(mt);
+    std::cout << "Egzamino rezultatas: " << Egzas << std::endl;
+
+    A ->Vidurkio_Balas = Galutinis_Deque(ND, Egzas, Pazymys);
+}
+
+double Galutinis_Deque (std::deque <int> &A, int Egzas, char tipas)
+{
+    double nd;
+    if (!A.empty()) 
+        tipas == '0' ? nd = Mediana_Deque(A, A.size()) : nd = Vidurkis_Deque(A, A.size());
+    else nd = 0;
+    return 0.4 * nd + 0.6 * Egzas;
+}
+double Vidurkis_Deque (std::deque <int> &Balai, int n)
+{
+    double Suma = 0;
+    for (int i = 0; i < n; i++)
+        Suma += Balai[i];
+    return 1.0 * Suma / n;
+}
+double Mediana_Deque (std::deque <int> &Balai, int n)
+{
+    double m;
+    std::sort(Balai.begin(), Balai.end());
+    n % 2 == 0 ? (m = 1.00 * (Balai[n / 2 - 1] + Balai[n / 2]) / 2) : m = Balai[n / 2];
+    return m;
+}
+void Data_Deque (std::deque<duomenys> &A, char Data, char Pazymys)
+{
+    char random;
+    bool IF;
+    int nd;
+    duomenys Laikinas;
+    std::deque <int> ND;
+    int Egzas;
+    do
+    {
+        IF = true;
+        ND.clear();
+
+        std::cout << "Vardas ir Pavarde\n";
+        std::cin >> Laikinas.Vardas >> Laikinas.Pavarde;
+
+        if(Data == '1')  Pazymiu_generavimas_Deque (&Laikinas, Pazymys);
+        else
+        {
+            std::cout << "Veskite pazymius: " << std::endl;
+            do
+            {
+                std::cin >>nd;
+                Pazymiai(nd, 0, 10);
+                if (nd == 0) IF = false;
+                else ND.push_back(nd);
+            } while (IF);
+            ND.shrink_to_fit();
+
+            std::cout << "Egzo balas: \n";
+            std::cin >> Egzas;
+            Pazymiai(Egzas, 0, 10);
+            Laikinas.Vidurkio_Balas = Galutinis_Deque(ND, Egzas, Pazymys);
+        }
+        A.push_back(Laikinas);
+
+        std::cout << "Prideti studenta: (1/0) ";
+        std::cin >> random;
+        Pasirinkimas(random, '0', '1');
+    } while (random == '1');
+}
+void Failo_Skaitymas_Deque (std::deque<duomenys> &A, std::string FileName, char Pazymys) 
+{
+    std::ifstream D (FileName);
+
+    int n = 0;
+    std::string header;
+    std::getline(D, header);           
+    std::istringstream firstRow (header);
+    std::string str;
+    while (firstRow >> str)             
+        n ++;
+    n -= 3;                        
+
+    duomenys B;
+    int tempMark, Egzaminas;
+    std::string row;
+    std::istringstream dataRow;
+    std::deque<int> ND;
+    while (std::getline(D, row)) 
+    {      
+        dataRow.clear();
+        dataRow.str(row);
+        dataRow >> B.Vardas >> B.Pavarde;
+        ND.clear();                      
+        for (int i = 0; i < n; i ++)
+        {
+            dataRow >> tempMark;
+            ND.push_back(tempMark);
+        }
+        dataRow >> Egzaminas;
+        B.Vidurkio_Balas = Galutinis_Deque(ND, Egzaminas, Pazymys);
+        A.push_back(B);               
+    } 
+    D.close();
+}
+
+void Dalinimas_Deque (std::deque<duomenys> &A, std::deque<duomenys> &B)
+{
+    std::sort(A.begin(), A.end(), [](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
+
+    int n;
+    while (A[n].Vidurkio_Balas < 5.0 && n != A.size()) 
+        n++;
+    std::copy(A.begin() + n, A.end(), std::back_inserter(B));
+    A.resize(n);
+    A.shrink_to_fit();
+}
+
+void Spauzdinimas_Deque (std::deque<duomenys> &A, char Pazymys, std::string Failas)
+{
+    std::ofstream R(Failas);
+    std::ostringstream RR("");
+
+    RR << std::setw(20) << std::left << "Vardas" << std::setw(20) << std::left << "Pavarde";
+    RR << "Vidurkis";
+    R << RR.str();
+
+    Pazymys == '0' ? R <<"(Med.)\n" : R << "(Vid.)\n";
+    R << "--------------------------------------------------------\n";
+
+    for (int i = 0; i < A.size(); i++)
+    {
+        RR.str("");
+        RR << std::setw(20) << std::left << A[i].Vardas << std::setw(20) << A[i].Pavarde;
+        RR << std::fixed << std::setprecision(2) << A[i].Vidurkio_Balas << std::endl;
+        R << RR.str();
+    }
+    R.close();
 }
