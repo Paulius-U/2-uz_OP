@@ -53,8 +53,11 @@
 
 1.Vector:
 ![image](https://user-images.githubusercontent.com/75576100/114997580-ac756080-9ea8-11eb-9911-3c32cf0d9743.png)
+
 ![image](https://user-images.githubusercontent.com/75576100/114997784-e34b7680-9ea8-11eb-96aa-50b09e3a8fab.png)
+
 ![image](https://user-images.githubusercontent.com/75576100/114997835-f3fbec80-9ea8-11eb-8ce4-2f35882aa61e.png)
+
 ![image](https://user-images.githubusercontent.com/75576100/114997917-0d9d3400-9ea9-11eb-9e95-0370ed1fc33c.png)
 
 2.List:
