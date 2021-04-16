@@ -49,5 +49,22 @@
 ![image](https://user-images.githubusercontent.com/75576100/114917696-e9047600-9e2e-11eb-9be4-8d90dcb6aa6e.png)
 ![image](https://user-images.githubusercontent.com/75576100/114917769-fd487300-9e2e-11eb-98f1-07ac474aeb31.png)
 
+0.5.2v
 
+1.Vector:
+![image](https://user-images.githubusercontent.com/75576100/114997580-ac756080-9ea8-11eb-9911-3c32cf0d9743.png)
+![image](https://user-images.githubusercontent.com/75576100/114997784-e34b7680-9ea8-11eb-96aa-50b09e3a8fab.png)
+![image](https://user-images.githubusercontent.com/75576100/114997835-f3fbec80-9ea8-11eb-8ce4-2f35882aa61e.png)
+![image](https://user-images.githubusercontent.com/75576100/114997917-0d9d3400-9ea9-11eb-9e95-0370ed1fc33c.png)
 
+2.List:
+![image](https://user-images.githubusercontent.com/75576100/114998556-c06d9200-9ea9-11eb-8f7c-3742297dda50.png)
+![image](https://user-images.githubusercontent.com/75576100/114998606-ccf1ea80-9ea9-11eb-8c47-2dc064894af4.png)
+![image](https://user-images.githubusercontent.com/75576100/114998674-dda26080-9ea9-11eb-9cbe-f4b02aed986b.png)
+![image](https://user-images.githubusercontent.com/75576100/114998772-f3b02100-9ea9-11eb-93c9-e600e5b78792.png)
+
+3.Deque:
+![image](https://user-images.githubusercontent.com/75576100/114999237-543f5e00-9eaa-11eb-80d7-7caa80dcd1f9.png)
+![image](https://user-images.githubusercontent.com/75576100/114999279-615c4d00-9eaa-11eb-8dd3-42186cd464aa.png)
+![image](https://user-images.githubusercontent.com/75576100/114999323-6caf7880-9eaa-11eb-81e4-8217a0be9e96.png)
+![image](https://user-images.githubusercontent.com/75576100/114999404-805adf00-9eaa-11eb-8bc2-b8c331cba1d7.png)
