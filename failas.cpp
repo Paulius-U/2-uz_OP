@@ -11,7 +11,7 @@ std::string GetFile ()
 {
     bool Failas;
     std::string FileName;
-    std::cout << "Enter the file name: " << std::endl;
+    std::cout << "Failo pavadinimas: " << std::endl;
     std::cin >> FileName;
     do {
         try {
@@ -24,7 +24,7 @@ std::string GetFile ()
             }
         } catch (int exception) {   
             Failas = true;
-            std::cout << "Failas - " << FileName << " Neegzistuojas" << std::endl;
+            std::cout << "Failas - " << FileName << " Neegzistuoja" << std::endl;
             std::cin.clear();
             std::cin.ignore(256,'\n');
             std::cin >> FileName;
