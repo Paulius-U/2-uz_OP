@@ -54,7 +54,7 @@ void Pazymiai (int& in, int min, int max)
 
 void Vectorius (char Data, char Pazymys)
 {
-    std::vector <duomenys> Skolininkai, islaike;
+    std::vector <duomenys> Skolininkai, islaike, Bendras;
     double s = 0;
 
     if(Data == '1' || Data =='2')
@@ -65,15 +65,15 @@ void Vectorius (char Data, char Pazymys)
         for(int i = 0; i < 3; i++)
             std::cout << std::endl;
         auto Start = std::chrono::high_resolution_clock::now();
-        Failo_Skaitymas_Vector(Skolininkai, Failo_Vardas, Pazymys);
+        Failo_Skaitymas_Vector(Bendras, Failo_Vardas, Pazymys);
         auto End = std::chrono::high_resolution_clock::now();
         std::cout << "Failo nuskaitymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< std::endl;
         s += std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
     }
-    Skolininkai.shrink_to_fit();
+    Bendras.shrink_to_fit();
 
     auto Start0 = std::chrono::high_resolution_clock::now();
-    Dalinimas_Vector(Skolininkai, islaike);
+    Dalinimas_Vector(Skolininkai, islaike, Bendras);
     auto End0 = std::chrono::high_resolution_clock::now();
     std::cout << "Failo suskirstymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.<< " s."<< std::endl;
     s += std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.;
@@ -208,17 +208,17 @@ void Failo_Skaitymas_Vector (std::vector<duomenys> &A, std::string FileName, cha
     D.close();
 }
 
-void Dalinimas_Vector (std::vector<duomenys> &A, std::vector<duomenys> &B)
+void Dalinimas_Vector (std::vector<duomenys> &A, std::vector<duomenys> &B, std::vector<duomenys> &C)
 {
-    std::sort(A.begin(), A.end(), [](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
+    std::sort(C.begin(), C.end(), [](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
 
     int n;
-    while (A[n].Vidurkio_Balas < 5.0 && n != A.size()) 
+    while (C[n].Vidurkio_Balas < 5.0 && n != C.size()) 
         n++;
-    B.reserve(A.size() - n);
+    B.reserve(C.size() - n);
+    A = C;
     std::copy(A.begin() + n, A.end(), std::back_inserter(B));
     A.resize(n);
-    A.shrink_to_fit();
 }
 
 void Spauzdinimas_Vector (std::vector<duomenys> &A, char Pazymys, std::string Failas)
@@ -245,7 +245,7 @@ void Spauzdinimas_Vector (std::vector<duomenys> &A, char Pazymys, std::string Fa
 
 void Listas (char Data, char Pazymys)
 {
-    std::list <duomenys> Skolininkai, islaike;
+    std::list <duomenys> Skolininkai, islaike, Bendras;
     double s = 0;
 
     if(Data == '1' || Data =='2')
@@ -256,14 +256,14 @@ void Listas (char Data, char Pazymys)
         for(int i = 0; i < 3; i++)
             std::cout << std::endl;
         auto Start = std::chrono::high_resolution_clock::now();
-        Failo_Skaitymas_List(Skolininkai, Failo_Vardas, Pazymys);
+        Failo_Skaitymas_List(Bendras, Failo_Vardas, Pazymys);
         auto End = std::chrono::high_resolution_clock::now();
         std::cout << "Failo nuskaitymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< std::endl;
         s += std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
     }
 
     auto Start0 = std::chrono::high_resolution_clock::now();
-    Dalinimas_List(Skolininkai, islaike);
+    Dalinimas_List(Skolininkai, islaike, Bendras);
     auto End0 = std::chrono::high_resolution_clock::now();
     std::cout << "Failo suskirstymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.<< " s."<< std::endl;
     s += std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.;
@@ -401,19 +401,19 @@ void Failo_Skaitymas_List (std::list<duomenys> &A, std::string FileName, char Pa
     D.close();
 }
 
-void Dalinimas_List (std::list<duomenys> &A, std::list<duomenys> &B)
+void Dalinimas_List (std::list<duomenys> &A, std::list<duomenys> &B, std::list<duomenys> &C)
 {
-    A.sort([](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
+    C.sort([](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
 
     int n = 0;
-    auto it = A.begin();
-    while (it->Vidurkio_Balas < 5.0 && it != A.end()) 
+    auto it = C.begin();
+    while (it->Vidurkio_Balas < 5.0 && it != C.end()) 
     {
         n++;
         it++;
     }
-    
-    B.assign(it, A.end());
+    A = C;
+    B.assign(it, C.end());
     A.resize(n);
 }
 
@@ -442,7 +442,7 @@ void Spauzdinimas_List (std::list<duomenys> &A, char Pazymys, std::string Failas
 
 void Dequelas (char Data, char Pazymys)
 {
-    std::deque <duomenys> Skolininkai, islaike;
+    std::deque <duomenys> Skolininkai, islaike, Bendras;
     double s = 0;
 
     if(Data == '1' || Data =='2')
@@ -453,14 +453,14 @@ void Dequelas (char Data, char Pazymys)
         for(int i = 0; i < 3; i++)
             std::cout << std::endl;  
         auto Start = std::chrono::high_resolution_clock::now();
-        Failo_Skaitymas_Deque(Skolininkai, Failo_Vardas, Pazymys);
+        Failo_Skaitymas_Deque(Bendras, Failo_Vardas, Pazymys);
         auto End = std::chrono::high_resolution_clock::now();
         std::cout << "Failo nuskaitymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< std::endl;
         s += std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.;
     }
 
     auto Start0 = std::chrono::high_resolution_clock::now();
-    Dalinimas_Deque(Skolininkai, islaike);
+    Dalinimas_Deque(Skolininkai, islaike, Bendras);
     auto End0 = std::chrono::high_resolution_clock::now();
     std::cout << "Failo suskirstymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.<< " s."<< std::endl;
     s += std::chrono::duration_cast<std::chrono::milliseconds>(End0 - Start0).count() / 1000.;
@@ -594,16 +594,16 @@ void Failo_Skaitymas_Deque (std::deque<duomenys> &A, std::string FileName, char 
     D.close();
 }
 
-void Dalinimas_Deque (std::deque<duomenys> &A, std::deque<duomenys> &B)
+void Dalinimas_Deque (std::deque<duomenys> &A, std::deque<duomenys> &B, std::deque<duomenys> &C)
 {
-    std::sort(A.begin(), A.end(), [](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
+    std::sort(C.begin(), C.end(), [](duomenys &s1, duomenys &s2) {return s1.Vidurkio_Balas < s2.Vidurkio_Balas;});
 
     int n;
-    while (A[n].Vidurkio_Balas < 5.0 && n != A.size()) 
+    while (C[n].Vidurkio_Balas < 5.0 && n != C.size()) 
         n++;
+    A = C;
     std::copy(A.begin() + n, A.end(), std::back_inserter(B));
     A.resize(n);
-    A.shrink_to_fit();
 }
 
 void Spauzdinimas_Deque (std::deque<duomenys> &A, char Pazymys, std::string Failas)
