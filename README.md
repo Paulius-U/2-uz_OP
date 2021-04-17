@@ -80,3 +80,38 @@
 ![image](https://user-images.githubusercontent.com/75576100/114999323-6caf7880-9eaa-11eb-81e4-8217a0be9e96.png)
 
 ![image](https://user-images.githubusercontent.com/75576100/114999404-805adf00-9eaa-11eb-8bc2-b8c331cba1d7.png)
+
+
+1.0v
+
+1. Buvo bandomas vector, list, deque Naudoti viename bendrame ir iskistyti i du skirtingus ir naudoti viena bendra ir isimti kitus kurie netiko i kita (list, deque, vector)
+
+isskirstymas i 2 atskirus:
+Failo nuskaitymas:
+
+![image](https://user-images.githubusercontent.com/75576100/115122893-1bdf7300-9fc3-11eb-9aab-851b48536b7a.png)
+
+
+Failo suskirstymas:
+
+![image](https://user-images.githubusercontent.com/75576100/115122904-2bf75280-9fc3-11eb-8b0b-b275cd72828b.png)
+
+
+Bendras:
+
+![image](https://user-images.githubusercontent.com/75576100/115122910-344f8d80-9fc3-11eb-90c9-3e08f952a024.png)
+
+
+2. Naudojame du ir vienas pertvarkomas:
+
+Failo nuskaitymas:
+
+![image](https://user-images.githubusercontent.com/75576100/115123038-d40d1b80-9fc3-11eb-8199-50398d6aa817.png)
+
+Failo suskirstymas:
+
+![image](https://user-images.githubusercontent.com/75576100/115123048-de2f1a00-9fc3-11eb-84eb-950fab973650.png)
+
+Is viso:
+
+![image](https://user-images.githubusercontent.com/75576100/115123053-eb4c0900-9fc3-11eb-9de2-b2a27575065f.png)
