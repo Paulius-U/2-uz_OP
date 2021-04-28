@@ -1,5 +1,23 @@
 #pragma once
 
+#include <vector>
+#include <list>
+#include <deque>
+#include <chrono>
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <random>
+
+struct duomenys
+{
+    std::string Vardas;
+    std::string Pavarde;
+    double Vidurkio_Balas;
+};
+
 template <typename T>
 void Klaida(T&);
 void Pasirinkimas (char&, char, char);
