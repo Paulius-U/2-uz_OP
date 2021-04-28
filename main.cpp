@@ -1,10 +1,8 @@
 #include <iostream> 
 #include <chrono>
 
-#include "struct.hpp"
-#include "failas.cpp"
-#include "funkcijos.cpp"
-
+#include "failas.h"
+#include "funkcijos.h"
 
 int main()
 {
@@ -20,30 +18,30 @@ int main()
     for(int i = 0; i < 3; i++)
         std::cout << std::endl;
 
-    // char failas;
-    // std::cout << "Sugeneruoti failus kompiuterui: (1/0) ";
-    // std::cin >> failas;
-    // Pasirinkimas (failas, '0', '1');
+    char failas;
+    std::cout << "Sugeneruoti failus kompiuterui: (1/0) ";
+    std::cin >> failas;
+    Pasirinkimas (failas, '0', '1');
 
-    // for(int i = 0; i < 3; i++)
-    //     std::cout << std::endl;
+    for(int i = 0; i < 3; i++)
+        std::cout << std::endl;
 
-    // if (failas == '1')
-    // {
-    //     int kiek = 1000;
-    //     std::cout << "Failu sukurimas uztruko: " << std::endl;
-    //     for(int i = 0; i < 4; i++)
-    //     {
-    //         auto Start = std::chrono::high_resolution_clock::now();
-    //         Sukurimas(kiek);
-    //         std::cout << "kursiokai" << kiek << ".txt - ";
-    //         kiek = kiek * 10;
-    //         auto End = std::chrono::high_resolution_clock::now();
-    //         std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< std::endl;
-    //     }
-    // }
-    // for(int i = 0; i < 3; i++)
-    //     std::cout << std::endl;
+    if (failas == '1')
+    {
+        int kiek = 1000;
+        std::cout << "Failu sukurimas uztruko: " << std::endl;
+        for(int i = 0; i < 4; i++)
+        {
+            auto Start = std::chrono::high_resolution_clock::now();
+            Sukurimas(kiek);
+            std::cout << "kursiokai" << kiek << ".txt uztruko: ";
+            kiek = kiek * 10;
+            auto End = std::chrono::high_resolution_clock::now();
+            std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(End - Start).count() / 1000.<< " s."<< std::endl;
+        }
+    }
+    for(int i = 0; i < 3; i++)
+        std::cout << std::endl;
 
     // char Data;
     // std::cout << "Kaip viskas vyks: " << std::endl;
