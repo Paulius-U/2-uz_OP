@@ -9,8 +9,8 @@
 #include <algorithm>
 #include <random>
 
-#include "funkcijos.hpp"
-#include "struct.hpp"
+#include "funkcijos.h"
+#include "failas.h"
 
 template <typename T>
 void Klaida(T& in)
