@@ -1,4 +1,14 @@
 # 2-uz_OP
+
+Naudojimo instrukcijos:
+
+-Parsisiūskite kodą.
+-Parsisiūskite ir įsidiekite C++ kompilerį
+-Atsidaryti terminalą ir jame įvesti programos vietą diske
+-Jeigu naudojete linux iveskite make, o jeigu windows ir turite mingw tada veskite mingw32-make
+-Sekite informaciją ekrane
+
+
 0.1v
 1. Galutinis balas 0.4 Namu darbai ir 0.6 Egzaminas
 2. yra padaryta su vector ir masyvais
