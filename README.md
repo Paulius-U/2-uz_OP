@@ -3,6 +3,7 @@
 Naudojimo instrukcijos:
 
 -Parsisiūskite kodą.
+
 -Parsisiūskite ir įsidiekite C++ kompilerį
 -Atsidaryti terminalą ir jame įvesti programos vietą diske
 -Jeigu naudojete linux iveskite make, o jeigu windows ir turite mingw tada veskite mingw32-make
